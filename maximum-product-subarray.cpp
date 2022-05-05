@@ -25,7 +25,7 @@ public:
             maxProd = max(nums[i], max(maxProd * nums[i], minProd * nums[i]));           
             minProd = min(nums[i], min(temp * nums[i], minProd * nums[i]));
             
-            prod = max(prod, max(maxProd, minProd));
+            prod = max(prod, maxProd);
         }
         return prod;
     }
