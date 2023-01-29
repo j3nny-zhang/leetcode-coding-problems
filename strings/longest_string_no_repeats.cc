@@ -7,6 +7,25 @@ using namespace std;
 // return length of longest substring that contains no duplicate characters
 // very slow runtime hmmmm ... surely there's a more efficient solution
 
+// actual solution: sliding window
+int lengthOfLongestSubstring(string& s) {
+    unordered_set<char> chars;
+    int maxSize = 0;
+    int i = 0, j = 0;
+    while (j < s.size()){
+        while (chars.find(s[j]) != chars.end()){
+            chars.erase(s[i]);
+            ++i;
+        }
+        maxSize = max(maxSize, j - i + 1);
+        chars.insert(s[j]);
+        ++j;
+    }
+    return maxSize;
+}
+
+// my solution (not optimized)
+
 int lengthOfLongestSubstring(string s) {
     unordered_map<char, int> seen = {};
     int length = 0;
