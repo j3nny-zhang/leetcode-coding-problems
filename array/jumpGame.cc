@@ -11,34 +11,41 @@ Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
 */
 
 class Solution {
-// my first solution is technically correct, but not optimal / time limit exceeded
+// my first solution is correct, but not optimal
   
-//     bool helper(int i, vector<int>& nums) {
-//         if (i == nums.size()-1) return true;
-//         if (i > nums.size()-1) return false;
-//         if (nums[i] == 0) return false;
+bool helper(int i, vector<int>& nums, unordered_map<int, bool>& memo) {
+        if (memo[i]) return false; // already visited
+        memo[i] = true;
 
-//         for (int j = 1; j <= nums[i]; j++) {
-//             if (helper(i + j, nums)) return true;
-//         }
+        if (i == nums.size()-1) return true;
+        if (i > nums.size()-1) return false;
+        if (nums[i] == 0) return false;
 
-//         return false;
-//     }
-
-// public:
-//     bool canJump(vector<int>& nums) {
-        
-//         return helper(0, nums);
-
-//     }
-    public:
-        bool canJump(vector<int>& nums) {
-            int dist = 0;
-            for (int i = 0; i < nums.size(); i++) {
-                if (i == nums.size() - 1) return true;
-                if (nums[i] == 0 && dist == i) return false;
-                dist = max(dist, nums[i] + i);
-            }
-            return true;
+        for (int j = 1; j <= nums[i]; j++) {
+            if (helper(i + j, nums, memo)) return true;
         }
+
+        return false;
+    }
+  
+public:
+    bool canJump(vector<int>& nums) {
+        if (nums.size() == 0) return true;
+        unordered_map<int, bool> memo;
+        return helper(0, nums, memo);
+
+    }
+// -------------------------------------------------------------------
+  
+// optimal solution
+public:
+    bool canJump(vector<int>& nums) {
+        int dist = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (i == nums.size() - 1) return true;
+            if (nums[i] == 0 && dist == i) return false;
+            dist = max(dist, nums[i] + i);
+        }
+        return true;
+    }
 };
