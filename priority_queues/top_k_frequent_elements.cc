@@ -33,4 +33,29 @@ public:
 
         return res;
     }
+    
+    // new solution from redoing question --- much better performace :D
+
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> m; // {num, count}
+        vector<int> result;
+
+        for (int num : nums) {
+            m[num] += 1;
+        }
+
+        priority_queue<pair<int, int>> pq;
+
+        for (auto entry : m) {
+            pq.push(pair{entry.second, entry.first}); // want to sort by count, m.second
+        }
+
+        while (k-- > 0) {
+            result.push_back(pq.top().second);
+            pq.pop();
+        }
+
+        return result;
+    }
 };
