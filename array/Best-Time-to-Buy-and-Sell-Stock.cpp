@@ -18,8 +18,6 @@ Input: prices = [2,4,1]
 Output: 2
 */
 
-#include <vector>
-
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
@@ -35,5 +33,25 @@ public:
         }
 
         return maxVal;
+    }
+};
+
+// more optimized solution
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int profit = 0;
+        int l = prices[0];
+
+        for (int price : prices) {
+            if (price - l > profit) {
+                profit = price - l;
+            } 
+            if (price - l < 0) {
+                l = price;
+            }
+        }
+
+        return profit;
     }
 };
