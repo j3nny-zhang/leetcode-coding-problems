@@ -20,6 +20,45 @@ To take course 1 you should have finished course 0, and to take course 0 you sho
 */
 
 // The idea here is to find whether or not there is a cycle in the graph
+class Solution {
+    bool dfs(int course, unordered_map<int, vector<int>>& adjList, unordered_set<int>& visited, unordered_set<int>& cycle) {
+        if (visited.find(course) != visited.end()) return true;
+        if (cycle.find(course) != cycle.end()) return false;
+
+        cycle.insert(course);
+
+        for (int n : adjList[course]) {
+            if (!dfs(n, adjList, visited, cycle)) return false;
+        }
+
+        cycle.erase(course);
+        visited.insert(course);
+
+        return true;
+    }
+    
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        unordered_map<int, vector<int>> adjList;
+        unordered_set<int> visited;
+        unordered_set<int> cycle;
+
+        // initialize adjList, where each course maps to a vector of its prerequisites
+        for (auto prereq : prerequisites) {
+            adjList[prereq[0]].push_back(prereq[1]);
+        }
+
+        for (int i = 0; i < numCourses; i++) {
+            if (!dfs(i, adjList, visited, cycle)) return false;
+        }
+
+
+        return true;
+    }
+};
+
+
+
 
 class Solution {
     bool dfs(int course, unordered_map<int, vector<int>>& adjList, unordered_set<int>& visited, vector<vector<int>>& prerequisites) {
