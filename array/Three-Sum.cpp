@@ -11,6 +11,41 @@ Output: [[-1,-1,2],[-1,0,1]]
 
 class Solution {
 public:
+    void twoSum(vector<int>& nums, int target, int left, vector<vector<int>> &result) {
+        int l = left + 1;
+        int r = nums.size()-1;
+
+        while (l < r) {
+            if (nums[l] + nums[r] == target) {
+                result.push_back(vector<int>{nums[left], nums[l], nums[r]});
+                l += 1;
+                r -= 1;
+                while (nums[l] == nums[l-1] && l < r) l += 1;
+            } else if (nums[l] + nums[r] > target) {
+                r -= 1;
+            } else {
+                l += 1;
+            }
+        }
+    }
+
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < nums.size(); i++) {
+            if (i > 0 && nums[i] == nums[i-1]) continue; // duplicates
+            twoSum(nums, -nums[i], i, result);
+        }
+
+        return result;
+    }
+};
+
+// ------------
+
+class Solution {
+public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         vector<vector<int>> result;
         sort(nums.begin(), nums.end());
