@@ -51,3 +51,40 @@ public:
         return maxArea;
     }
 };
+
+// --
+class Solution {
+    int dfs(set<vector<int>> &visited, vector<vector<int>>& grid, int row, int col, int i, int j) {
+        if (i < 0 || i >= row || j < 0 || j >= col) return 0; 
+        if (grid[i][j] == 0) return 0;
+        if (visited.find({i, j}) != visited.end()) return 0;
+        visited.insert({i, j});
+
+        int up = dfs(visited, grid, row, col, i, j+1);
+        int bottom = dfs(visited, grid, row, col, i, j-1);
+        int left = dfs(visited, grid, row, col, i-1, j);
+        int right = dfs(visited, grid, row, col, i+1, j);
+        
+        return up + bottom + left + right + 1;
+    }
+
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int row = grid.size();
+        int col = grid[0].size();
+        set<vector<int>> visited;
+        int maxArea = 0;
+        int area = 0;
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (grid[i][j] == 1) {
+                    area = 
+                    dfs(visited, grid, row, col, i, j);
+                    maxArea = max(area, maxArea);
+                }
+            }
+        }
+        return maxArea;
+    }
+};
