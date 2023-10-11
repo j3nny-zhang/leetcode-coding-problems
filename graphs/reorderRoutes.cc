@@ -49,3 +49,34 @@ public:
         return count;
     }
 };
+
+// -- bfs --
+class Solution {
+    void dfs(unordered_map<int, vector<int>> &neighbours, unordered_set<int> &visited, int &count, int node) {
+        if (visited.find(abs(node)) != visited.end()) return;
+        if (node < 0) count += 1;
+        visited.insert(abs(node));
+
+        for (int n : neighbours[abs(node)]) {
+            dfs(neighbours, visited, count, n);
+        }
+    }
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        
+        // let a negative number be a node facing "outward" from 0
+        unordered_map<int, vector<int>> neighbours;
+
+        for (vector<int> connection : connections) {
+            neighbours[connection[0]].push_back(-connection[1]);
+            neighbours[connection[1]].push_back(connection[0]);
+        }
+
+        int count = 0;
+        unordered_set<int> visited;
+        
+        dfs(neighbours, visited, count, 0);
+
+        return count;
+    }
+};
