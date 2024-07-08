@@ -59,3 +59,32 @@ public:
  * obj->set(key,value,timestamp);
  * string param_2 = obj->get(key,timestamp);
  */
+
+
+// this version uses lower_bound which is logn
+
+class TimeMap {
+    unordered_map<string, map<int, string>> m; // {key, {timestamp, value}}
+public:
+    TimeMap() {
+        
+    }
+    
+    void set(string key, string value, int timestamp) {
+        m[key][timestamp] = value;
+    }
+    
+    string get(string key, int timestamp) {
+        // first check that key is in m
+        if (m.find(key) == m.end()) return "";
+        auto it = m[key].lower_bound(timestamp);
+        if ((*it).first == timestamp) return m[key][timestamp];
+
+        // edge case that it is lower than the smallest timestamp in the map (ie it won't exist)
+        if (it == m[key].begin() && (*it).first != timestamp) return "";
+        --it;
+
+        return m[key][(*it).first];
+    }
+};
+
