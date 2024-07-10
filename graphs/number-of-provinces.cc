@@ -23,12 +23,13 @@ Output: 3
 */
 
 class Solution {
-    void exploreProvince(int curr, unordered_map<int, vector<int>> &g, vector<int> &visited) {
+    void exploreProvince(int curr, vector<vector<int>>& isConnected, vector<int> &visited) {
         if (visited[curr] == 1) return;
         visited[curr] = 1;
 
-        for (int neighbour : g[curr]) {
-            exploreProvince(neighbour, g, visited);
+        for (int i = 0; i < isConnected.size(); i++) {
+            if (isConnected[curr][i] == 1)
+            exploreProvince(i, isConnected, visited);
         }
     }
 public:
@@ -36,21 +37,10 @@ public:
         int n = isConnected.size();
         unordered_map<int, vector<int>> g;
 
-        // treat each 1 as an edge, remove self edges
-        for (int i = 0; i < n; i++) {
-            // each vector is the neighbour set of i
-            for (int j = 0; j < n; j++) {
-                if (isConnected[i][j] == 1) {
-                    g[i].push_back(j);
-                    g[j].push_back(i);
-                }
-            }
-        }
-
         int provinces = 0;
         vector<int> visited(n, 0);
         for (int i = 0; i < n; i++) {
-            if (visited[i] == 0) {exploreProvince(i, g, visited); provinces += 1;}
+            if (visited[i] == 0) {exploreProvince(i, isConnected, visited); provinces += 1;}
         }
 
         return provinces;
