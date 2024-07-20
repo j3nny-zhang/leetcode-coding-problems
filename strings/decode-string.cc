@@ -24,50 +24,51 @@ Output: "abcabccdcdcdef"
 class Solution {
 public:
     string decodeString(string s) {
-        stack<string> sk;
-        string decode;
-        string digit = ""; // if we are reading in a digit - only relevant for first if statement
-        
+        stack<char> st;
+
         for (int i = 0; i < s.size(); i++) {
-
-            if (s[i] == ']') {
-                while (true) {
-                    string top = sk.top();
-                    sk.pop();
-                    if (top == "[") {
-                        break;
-                    }
-                    decode = top + decode;
-                }
-
-                // there is now a number / numbers
-                string digit;
-                while (true) {
-                    if (sk.empty()) break;
-                    char d = sk.top()[0];
-                    if (!isdigit(d)) break;
-                    digit = d + digit;
-                    sk.pop();
-                }
-                int num = stoi(digit);
-                string toDuplicate = decode;
-                while (num - 1 > 0) {
-                    decode += toDuplicate;
-                    num -= 1;
-                }
-                sk.push(decode);
-                decode = "";
-            } else {
-                string ch = "";
-                ch += s[i];
-                sk.push(ch);
+            if (s[i] != ']') {
+                st.push(s[i]);
+                continue;
             }
+
+            string substring = "";
+            while (st.top() != '[') {
+                substring = st.top() + substring;
+                st.pop();
+            }
+
+            // now top is [ character
+            st.pop();
+
+            // now top is a number, may be more than one digit
+            string num = "";
+            while (!st.empty() && isdigit(st.top())) {
+                num = st.top() + num;
+                st.pop();
+            }
+
+            int rep = stoi(num);
+
+            string ss = "";
+            // repeat substring rep times
+            for (int j = 0; j < rep; j++) {
+                ss += substring;
+            }
+            
+            // now put all the chars in ss back into the stack
+            for (char c : ss) {
+                st.push(c);
+            }
+
+        }
+        
+        string res = "";
+        while (!st.empty()) {
+            res = st.top() + res;
+            st.pop();
         }
 
-        while (!sk.empty()) {
-            decode = sk.top() + decode;
-            sk.pop();
-        }
-        return decode;
+        return res;
     }
 };
