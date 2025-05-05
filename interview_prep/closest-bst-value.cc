@@ -24,26 +24,27 @@ Output: 1
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
-    TreeNode* res = nullptr;
-    void helper(TreeNode* node, double target, double& diff) {
+    void helper(TreeNode* node, double target, double& diff, TreeNode *&res) {
         if (!node) return;
 
-        helper(node->left, target, diff);
+        helper(node->left, target, diff, res);
 
         if (abs(target - node->val) < diff) {
             res = node;
             diff = abs(target - node->val);
         }
 
-        helper(node->right, target, diff);
+        helper(node->right, target, diff, res);
 
     }
     
 public:
     int closestValue(TreeNode* root, double target) {
         double diff = INT_MAX;
-        helper(root, target, diff);
+        TreeNode* res = nullptr;
+        helper(root, target, diff, res);
 
         return res->val;
     }
