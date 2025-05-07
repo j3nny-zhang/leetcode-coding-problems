@@ -22,44 +22,23 @@ A substring is a contiguous non-empty sequence of characters within a string.
 class Solution {
 public:
     bool validWordAbbreviation(string word, string abbr) {
-        vector<string> tokens;
-
-        // parse abbr string and convert into tokens of chars and numbers
+        int pointer = 0;
         for (int i = 0; i < abbr.size(); i++) {
-            if (isdigit(abbr[i])) {
-                if (abbr[i] == '0') return false; // edge case, leading 0
-                string number = "";
-                while (isdigit(abbr[i])) {
-                    number += abbr[i++];
-                }
-                i -= 1;
-                tokens.push_back(number);
+            if (!isdigit(abbr[i])) {
+                if (word[pointer] != abbr[i]) return false;
+                pointer += 1;
             } else {
-                string str(1, abbr[i]);
-                tokens.push_back(str); // turns char into string of length 1
+                if (abbr[i] == '0') return false; // no leading zeroes 
+                
+                // check for digits in abbr
+                string digit = "";
+                while (isdigit(abbr[i])) digit += abbr[i++];
+                i -= 1;
+
+                pointer += stoi(digit);                
             }
         }
 
-        int index = 0; // keeps track of position in "word"
-        int n; 
-
-        // check if valid abbr
-        for (string &t : tokens) {
-            stringstream ss{t};
-            if (ss >> n) { // is a digit
-                index += n;
-                continue;
-            }
-
-            // convert char into string
-            string comp = "";
-            comp += word[index];
-
-            if (t != comp) return false;
-            index += 1;
-        }
-
-        if (index != word.size()) return false;
-        return true;
+        return pointer == word.size() ? true : false; // ensure we have traversed all of word
     }
 };
