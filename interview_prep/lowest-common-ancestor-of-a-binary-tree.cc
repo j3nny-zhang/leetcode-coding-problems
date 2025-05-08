@@ -71,3 +71,33 @@ public:
         return left == nullptr ? right : left;
     }
 };
+
+// leetcode solution
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    TreeNode* lca;
+    bool foundNode(TreeNode* node, TreeNode* p, TreeNode* q) {
+        if (!node) return false;
+
+        bool left = foundNode(node->left, p, q);
+        bool right = foundNode(node->right, p, q);
+
+        bool mid = (node == p || node == q);
+        if (left + right + mid >= 2) lca = node;
+
+        return (left || right || mid);
+    } 
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        foundNode(root, p, q);
+        return lca;
+    }
+};
