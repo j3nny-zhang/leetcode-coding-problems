@@ -32,6 +32,15 @@ vector<int> topSort(vector<vector<int>>& adjList, int V) {
 }
 
 // using stack
+void dfs(int v, vector<vector<int>>& adj, vector<bool>& visited, stack<int>& st) {
+  visited[v] = true;
+  for (int i : adj[v]) {
+    if (!visited[i]) dfs(i, adj, visited, st);
+  }
+  st.push(v);
+}
+
+
 vector<int> topSort(vector<vector<int>>& adj) {
   int V = adj.size();
   stack<int> st;
