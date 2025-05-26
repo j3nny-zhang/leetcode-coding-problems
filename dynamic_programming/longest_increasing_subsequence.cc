@@ -10,6 +10,30 @@ Output: 4
 Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
 */
 
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        // let dp[i] be the longest increasing subsequence until i-1  
+        // dp[i] = dp[j] + 1 if we add to subsequence until j, for j <= i
+        // dp[i] = dp[i-1] otherwise
+
+        vector<int> dp(nums.size(), 1);
+
+        int res = 1;
+
+        for (int i = 0; i < nums.size(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+            res = max(res, dp[i]);
+        }
+
+        return res;
+    }
+};
+
 // n^2, but much more intuitive
 class Solution {
     
